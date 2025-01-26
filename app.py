@@ -10,8 +10,8 @@ Original file is located at
 import streamlit as st
 import random
 
-st.title('Test Streamlit')
-st.write('Hello World!')
+st.title('Wiritphon Yusamran')
+st.write('Hello Mew!')
 
 if st.button('Generate Random Number'):
     random_number = random.randint(1, 100)
