@@ -1,66 +1,59 @@
 import streamlit as st
-import json
-import os
 
-USER_DATA_FILE = "users.json"
-
-# โหลดข้อมูลผู้ใช้จากไฟล์ JSON
-def load_users():
-    if os.path.exists(USER_DATA_FILE):
-        with open(USER_DATA_FILE, "r") as f:
-            return json.load(f)
-    return {}
-
-# บันทึกข้อมูลผู้ใช้ลงไฟล์ JSON
-def save_users(users):
-    with open(USER_DATA_FILE, "w") as f:
-        json.dump(users, f, indent=4)
-
-def login_page():
-    st.title("🔐 Sign In / Sign Up Page")
-
-    users = load_users()  # โหลดข้อมูลผู้ใช้จากไฟล์
-
-    if "logged_in" not in st.session_state:
-        st.session_state.logged_in = False
-
-    menu = st.radio("Select an option", ["Sign In", "Sign Up"])
-
-    if menu == "Sign Up":
-        st.subheader("Create a new account")
-        new_username = st.text_input("New Username", key="new_username")
-        new_password = st.text_input("New Password", type="password", key="new_password")
-        confirm_password = st.text_input("Confirm Password", type="password", key="confirm_password")
-
-        if st.button("Sign Up"):
-            if new_username in users:
-                st.error("❌ Username already exists!")
-            elif new_password != confirm_password:
-                st.error("❌ Passwords do not match!")
-            else:
-                users[new_username] = new_password
-                save_users(users)  # บันทึกข้อมูลผู้ใช้
-                st.success("✅ Account created successfully! You can now sign in.")
-
-    elif menu == "Sign In":
-        st.subheader("Sign In to your account")
-        username = st.text_input("Username", key="username")
-        password = st.text_input("Password", type="password", key="password")
-
-        if st.button("Sign In"):
-            if username in users and users[username] == password:
-                st.session_state.logged_in = True
-                st.session_state.username = username
-                st.success("✅ Sign In successful!")
-                st.experimental_rerun()
-            else:
-                st.error("❌ Invalid username or password")
-
-    if st.session_state.logged_in:
-        st.success(f"Welcome, {st.session_state.username}!")
-        if st.button("Logout"):
-            st.session_state.logged_in = False
-            st.experimental_rerun()
+def main():
+    st.title("Web Form for Job Management")
+    
+    # User Registration
+    st.header("User Registration")
+    name = st.text_input("Full Name")
+    email = st.text_input("Email")
+    role = st.selectbox("Select Role", ["Employee", "Employer"])
+    
+    if role == "Employee":
+        st.header("Employee Section")
+        skills = st.text_area("Enter Your Skills")
+        looking_for_jobs = st.checkbox("Looking for Jobs?")
+    
+    elif role == "Employer":
+        st.header("Employer Section")
+        job_description = st.text_area("Job Description")
+        salary_offer = st.number_input("Salary Offer ($)", min_value=0.0, step=100.0)
+        num_positions = st.number_input("Number of Positions", min_value=1, step=1)
+    
+    # Job Matching Process
+    st.header("Job Matching")
+    match_jobs = st.button("Find Matching Jobs")
+    
+    if match_jobs and role == "Employee":
+        st.success("Matching jobs found based on your skills!")
+    elif match_jobs and role == "Employer":
+        st.success("Top candidates found for your job posting!")
+    
+    # Payment Section
+    st.header("Payment Process")
+    if role == "Employer":
+        confirm_payment = st.button("Confirm Payment to Employee")
+        if confirm_payment:
+            st.success("Payment Processed Successfully!")
+    
+    if role == "Employee":
+        confirm_receipt = st.button("Confirm Receipt of Payment")
+        if confirm_receipt:
+            st.success("Payment Received!")
+    
+    # Job Review
+    st.header("Job Review")
+    if role == "Employer":
+        review_employee = st.text_area("Review Employee Performance")
+        submit_review = st.button("Submit Review")
+        if submit_review:
+            st.success("Employee review submitted!")
+    
+    if role == "Employee":
+        review_job = st.text_area("Review Job Experience")
+        submit_job_review = st.button("Submit Job Review")
+        if submit_job_review:
+            st.success("Job review submitted!")
 
 if __name__ == "__main__":
-    login_page()
+    main()
