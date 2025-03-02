@@ -1,9 +1,1 @@
-import json
-
-USER_DATA_FILE = "users.json"
-
-# สร้างไฟล์ JSON เปล่าหากยังไม่มี
-with open(USER_DATA_FILE, "w") as f:
-    json.dump({}, f, indent=4)
-
-print("users.json has been created!")
+{}
