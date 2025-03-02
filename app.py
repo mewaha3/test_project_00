@@ -2,17 +2,16 @@ import streamlit as st
 import json
 import os
 
-# ไฟล์เก็บข้อมูลผู้ใช้
 USER_DATA_FILE = "users.json"
 
-# ฟังก์ชันโหลดข้อมูลผู้ใช้
+# โหลดข้อมูลผู้ใช้จากไฟล์ JSON
 def load_users():
     if os.path.exists(USER_DATA_FILE):
         with open(USER_DATA_FILE, "r") as f:
             return json.load(f)
     return {}
 
-# ฟังก์ชันบันทึกข้อมูลผู้ใช้
+# บันทึกข้อมูลผู้ใช้ลงไฟล์ JSON
 def save_users(users):
     with open(USER_DATA_FILE, "w") as f:
         json.dump(users, f, indent=4)
